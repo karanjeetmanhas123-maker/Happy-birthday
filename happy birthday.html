@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Happy Birthday Madhvan & Madhur</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;font-family:Segoe UI,Tahoma,sans-serif}
+body{
+display:flex;align-items:center;justify-content:center;
+background:linear-gradient(-45deg,#ff4e50,#f9d423,#24c6dc,#5433ff,#ff6ec4);
+background-size:500% 500%;
+animation:bg 14s ease infinite;
+}
+@keyframes bg{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+.card{
+position:relative;z-index:10;
+background:rgba(255,255,255,.16);
+backdrop-filter:blur(12px);
+padding:35px;border-radius:28px;
+text-align:center;color:#fff;
+box-shadow:0 20px 50px rgba(0,0,0,.3);
+max-width:760px
+}
+h1{font-size:3rem;margin:.2em 0}
+.names{font-size:2.2rem;color:#fff36b;font-weight:700}
+.msg{font-size:1.15rem;line-height:1.7}
+#count{font-size:1.3rem;margin:18px 0;color:#fff}
+.cake{font-size:90px;cursor:pointer;animation:bounce 2s infinite}
+@keyframes bounce{50%{transform:translateY(-10px)}}
+.candle{font-size:22px;display:block}
+.float,.conf{position:fixed;pointer-events:none}
+.float{font-size:38px;animation:rise linear infinite}
+@keyframes rise{from{transform:translateY(110vh)}to{transform:translateY(-120vh) rotate(360deg)}}
+.conf{width:8px;height:14px;animation:fall 4s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(700deg);opacity:0}}
+button{padding:12px 22px;border:none;border-radius:30px;background:#ff4081;color:#fff;font-size:1rem;cursor:pointer}
+.gift{font-size:80px;cursor:pointer}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🎉 HAPPY BIRTHDAY 🎉</h1>
+<div class="names">MADHVAN 💖 MADHUR</div>
+<div id="count"></div>
+<div class="cake" title="Click the cake">🎂<span class="candle">🕯️🕯️🕯️</span></div>
+<p class="msg">May your lives always be filled with happiness, success, laughter, good health, and unforgettable memories. Wishing both of you an amazing year ahead! 🥳🎁✨</p>
+<div class="gift" id="gift">🎁</div>
+<p id="giftmsg" class="hidden"><b>🎊 Surprise! 🎊</b><br>You both are amazing. May every dream come true! ❤️</p>
+<br>
+<button onclick="playSong()">🎵 Play Birthday Tune</button>
+</div>
+
+<script>
+const icons=["🎈","🎉","🎊","✨","💖","🎁","⭐","🥳"];
+for(let i=0;i<90;i++){
+ let d=document.createElement("div");
+ d.className="float";
+ d.textContent=icons[Math.floor(Math.random()*icons.length)];
+ d.style.left=Math.random()*100+"vw";
+ d.style.animationDuration=(5+Math.random()*8)+"s";
+ d.style.animationDelay=(Math.random()*6)+"s";
+ document.body.appendChild(d);
+}
+function confetti(){
+ const colors=["#ff0","#f00","#0f0","#0ff","#f0f","#fff","#ffa500"];
+ for(let i=0;i<220;i++){
+   let c=document.createElement("div");
+   c.className="conf";
+   c.style.left=Math.random()*100+"vw";
+   c.style.top="-20px";
+   c.style.background=colors[Math.floor(Math.random()*colors.length)];
+   c.style.animationDelay=(Math.random()*1.5)+"s";
+   document.body.appendChild(c);
+   setTimeout(()=>c.remove(),4500);
+ }
+}
+confetti();
+
+document.getElementById("gift").onclick=()=>{
+ document.getElementById("gift").textContent="🎉";
+ document.getElementById("giftmsg").classList.remove("hidden");
+ confetti();
+};
+
+function playSong(){
+ const ctx=new (window.AudioContext||window.webkitAudioContext)();
+ const notes=[262,262,294,262,349,330,262,262,294,262,392,349,262,262,523,440,349,330,294,466,466,440,349,392,349];
+ let t=ctx.currentTime;
+ notes.forEach(n=>{
+   let o=ctx.createOscillator(),g=ctx.createGain();
+   o.frequency.value=n;o.type="triangle";
+   o.connect(g);g.connect(ctx.destination);
+   g.gain.setValueAtTime(.05,t);
+   o.start(t);o.stop(t+.25);t+=.28;
+ });
+}
+const target=new Date();
+target.setHours(target.getHours()+24);
+function tick(){
+ let diff=target-new Date();
+ if(diff<0){count.innerHTML="🎉 It's Celebration Time!";return;}
+ let h=Math.floor(diff/36e5),m=Math.floor(diff%36e5/6e4),s=Math.floor(diff%6e4/1000);
+ count.innerHTML="⏳ Celebration Countdown: "+h+"h "+m+"m "+s+"s";
+}
+setInterval(tick,1000);tick();
+</script>
+</body>
+</html>
